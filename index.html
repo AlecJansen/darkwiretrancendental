@@ -43,7 +43,7 @@
 
     /* Background canvas and grid */
     #bg-canvas, #grid-canvas { position: fixed; inset: 0; z-index: -2; display: block; }
-    #grid-canvas { z-index: -1; opacity: .7; }
+    #grid-canvas { z-index: -1; opacity: .5; }
 
     /* ============================
        HEADER
@@ -329,6 +329,7 @@
   <!-- ============================
        FX SCRIPTS
        ============================ -->
+  
   <script>
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -343,12 +344,19 @@
       {a1:'#ffd29e', a2:'#9ef7ff', a3:'#ff9ef4'}  // dawn
     ];
     let idx = 0;
+    function cacheAccents() {
+      const cs = getComputedStyle(document.documentElement);
+      A1 = cs.getPropertyValue('--accent-1').trim();
+      A2 = cs.getPropertyValue('--accent-2').trim();
+      A3 = cs.getPropertyValue('--accent-3').trim();
+    }
     document.getElementById('themeCycle').addEventListener('click', () => {
       idx = (idx + 1) % palettes.length;
       const p = palettes[idx];
       document.documentElement.style.setProperty('--accent-1', p.a1);
       document.documentElement.style.setProperty('--accent-2', p.a2);
       document.documentElement.style.setProperty('--accent-3', p.a3);
+      cacheAccents();
     });
 
     /* Calm mode toggle: freezes background animation, lowers glow */
@@ -364,7 +372,7 @@
     const glitchOnce = () => {
       const original = brand.textContent;
       const seq = [40, 80, 120, 200];
-      const chars = '!@#$%^&*()_+{}[]<>/\\|~';
+      const chars = '!@#$%^&*()_+{}[]<>/\|~';
       seq.forEach((t, i) => setTimeout(() => {
         brand.style.filter = 'drop-shadow(0 0 30px rgba(255,46,166,.6)) hue-rotate(40deg)';
         brand.style.transform = `translate(${(i%2?1:-1)*2}px, ${(i%2?1:-1)}px)`;
@@ -375,8 +383,20 @@
     document.getElementById('glitchOnce').addEventListener('click', glitchOnce);
 
     /* ============================
-       CANVAS: ORGANIC WIRES + PARTICLES
+       CANVAS: ORGANIC WIRES + PARTICLES (optimized)
        ============================ */
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+    const CONFIG = {
+      PARTICLES: prefersReduced ? 0 : (isMobile ? 60 : 90),
+      FILAMENTS: prefersReduced ? 0 : (isMobile ? 7 : 10),
+      PULL: 0.0006,            // attraction toward pointer (reduced from 0.002)
+      MAX_SPEED: 1.25,         // soft cap on particle speed (CSS px / frame)
+      DRAG: 0.985,             // slight damping
+      SHADOW_BLUR: 6,          // cheaper than 10
+      INFLUENCE_RADIUS: 380,   // px radius where pointer has meaningful pull
+      PATH_LEN: 56             // filament trail length (trimmed from 64)
+    };
+
     const bg = document.getElementById('bg-canvas');
     const ctx = bg.getContext('2d');
     const grid = document.getElementById('grid-canvas');
@@ -385,26 +405,38 @@
     let W, H, DPR;
     const state = {
       t: 0,
-      pointer: {x: 0, y: 0, vx:0, vy:0},
+      pointer: {x: innerWidth/2, y: innerHeight/2, vx:0, vy:0},
       particles: [],
       filaments: []
     };
 
+    let A1, A2, A3;
+    cacheAccents();
+
     function resize() {
       DPR = Math.min(window.devicePixelRatio || 1, 2);
-      W = bg.width = Math.floor(innerWidth * DPR);
-      H = bg.height = Math.floor(innerHeight * DPR);
+      W = Math.floor(innerWidth * DPR);
+      H = Math.floor(innerHeight * DPR);
+
+      // Set canvas backing store and CSS size
+      bg.width = W; bg.height = H;
       grid.width = W; grid.height = H;
+      bg.style.width = innerWidth + 'px';
+      bg.style.height = innerHeight + 'px';
+      grid.style.width = innerWidth + 'px';
+      grid.style.height = innerHeight + 'px';
+
+      // Draw using CSS pixels
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
       gtx.setTransform(DPR, 0, 0, DPR, 0, 0);
       drawGrid();
     }
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', resize, {passive:true});
     resize();
 
     /* Parallax grid */
     function drawGrid() {
-      gtx.clearRect(0,0,W,H);
+      gtx.clearRect(0,0,innerWidth,innerHeight);
       const step = 24; // px
       gtx.beginPath();
       gtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid');
@@ -423,31 +455,51 @@
     class Particle {
       constructor(x, y) {
         this.x = x; this.y = y;
-        this.vx = (Math.random() - .5) * 0.6;
-        this.vy = (Math.random() - .5) * 0.6;
-        this.life = 0; this.max = 600 + Math.random() * 600;
-        this.size = 1 + Math.random() * 1.2;
+        this.vx = (Math.random() - .5) * 0.5;
+        this.vy = (Math.random() - .5) * 0.5;
+        this.life = 0; this.max = 700 + Math.random() * 600;
+        this.size = 1 + Math.random() * 1.1;
       }
       step() {
         const p = state.pointer;
-        const dx = (p.x - this.x) * 0.002;
-        const dy = (p.y - this.y) * 0.002;
-        this.vx += dx; this.vy += dy;
-        this.vx *= 0.98; this.vy *= 0.98;
+        const dx = p.x - this.x;
+        const dy = p.y - this.y;
+        const d2 = dx*dx + dy*dy;
+        const radius2 = CONFIG.INFLUENCE_RADIUS * CONFIG.INFLUENCE_RADIUS;
+        if (d2 < radius2) {
+          // falloff: stronger when closer, smoothly to zero at radius
+          const fall = 1 - (d2 / radius2);
+          this.vx += dx * CONFIG.PULL * fall;
+          this.vy += dy * CONFIG.PULL * fall;
+        }
+
+        // drag and clamp
+        this.vx *= CONFIG.DRAG;
+        this.vy *= CONFIG.DRAG;
+        const speed = Math.hypot(this.vx, this.vy);
+        if (speed > CONFIG.MAX_SPEED) {
+          const s = CONFIG.MAX_SPEED / speed;
+          this.vx *= s; this.vy *= s;
+        }
+
         this.x += this.vx; this.y += this.vy; this.life++;
         if (this.x < -50 || this.y < -50 || this.x > innerWidth+50 || this.y > innerHeight+50 || this.life > this.max) this.reset();
       }
       reset() {
         this.x = Math.random() * innerWidth;
         this.y = Math.random() * innerHeight;
-        this.life = 0; this.vx = (Math.random() - .5) * 0.6; this.vy = (Math.random() - .5) * 0.6;
+        this.life = 0; this.vx = (Math.random() - .5) * 0.5; this.vy = (Math.random() - .5) * 0.5;
       }
       draw() {
         ctx.beginPath();
         ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
-        const a2 = getComputedStyle(document.documentElement).getPropertyValue('--accent-2').trim();
-        ctx.fillStyle = a2 + 'AA';
-        ctx.shadowColor = a2; ctx.shadowBlur = 10;
+        // Use 8-digit hex for alpha if supported; otherwise fallback to rgba.
+        try {
+          ctx.fillStyle = A2 + '99'; // ~60% opacity
+        } catch {
+          ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        }
+        ctx.shadowColor = A2; ctx.shadowBlur = CONFIG.SHADOW_BLUR;
         ctx.fill(); ctx.shadowBlur = 0;
       }
     }
@@ -456,68 +508,73 @@
     class Filament {
       constructor(seed) {
         this.seed = seed; this.path = []; this.t = Math.random()*1000;
-        this.hue = Math.random();
       }
       step(time) {
-        const speed = calm || prefersReduced ? 0.0008 : 0.0018;
+        const speed = calm || prefersReduced ? 0.0007 : 0.0015;
         this.t += speed * (1 + Math.sin(time * 0.0002));
-        const amp = 80;
+        const amp = 72;
         const cx = innerWidth * (0.2 + 0.6 * (this.seed % 1));
         const cy = innerHeight * (0.2 + 0.6 * ((this.seed*1.3) % 1));
         const x = cx + Math.cos(this.t*2 + this.seed*6.283) * amp + (state.pointer.x - innerWidth/2) * 0.02;
         const y = cy + Math.sin(this.t*3 + this.seed*6.283) * amp + (state.pointer.y - innerHeight/2) * 0.02;
-        this.path.push({x,y}); if (this.path.length > 64) this.path.shift();
+        this.path.push({x,y}); if (this.path.length > CONFIG.PATH_LEN) this.path.shift();
       }
       draw() {
         if (this.path.length < 2) return;
-        const a1 = getComputedStyle(document.documentElement).getPropertyValue('--accent-1').trim();
-        const a3 = getComputedStyle(document.documentElement).getPropertyValue('--accent-3').trim();
         const grad = ctx.createLinearGradient(this.path[0].x, this.path[0].y, this.path[this.path.length-1].x, this.path[this.path.length-1].y);
-        grad.addColorStop(0, a1);
-        grad.addColorStop(1, a3);
-        ctx.lineWidth = 1.5; ctx.strokeStyle = grad; ctx.beginPath();
+        grad.addColorStop(0, A1);
+        grad.addColorStop(1, A3);
+        ctx.lineWidth = 1.25;
+        ctx.strokeStyle = grad;
+        ctx.beginPath();
         for (let i=0;i<this.path.length;i++) {
           const p = this.path[i];
           if (i===0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
         }
-        ctx.shadowColor = a1; ctx.shadowBlur = 14; ctx.stroke(); ctx.shadowBlur = 0;
+        ctx.shadowColor = A1; ctx.shadowBlur = 10; ctx.stroke(); ctx.shadowBlur = 0;
       }
     }
 
     function initScene() {
-      state.particles = Array.from({length: 120}, () => new Particle(Math.random()*innerWidth, Math.random()*innerHeight));
-      state.filaments = Array.from({length: 10}, (_,i) => new Filament((i+1)/10));
+      state.particles = Array.from({length: CONFIG.PARTICLES}, () => new Particle(Math.random()*innerWidth, Math.random()*innerHeight));
+      state.filaments = Array.from({length: CONFIG.FILAMENTS}, (_,i) => new Filament((i+1)/CONFIG.FILAMENTS));
     }
     initScene();
 
-    window.addEventListener('mousemove', (e)=>{ state.pointer.x = e.clientX; state.pointer.y = e.clientY; });
+    window.addEventListener('mousemove', (e)=>{ state.pointer.x = e.clientX; state.pointer.y = e.clientY; }, {passive:true});
     window.addEventListener('touchmove', (e)=>{ const t = e.touches[0]; state.pointer.x = t.clientX; state.pointer.y = t.clientY; }, {passive:true});
+
+    // When switching to calm, keep a faint still frame (no stepping) with fewer particles.
+    function drawStill() {
+      state.filaments.forEach(f=>{ if (f.path.length<2) f.step(state.t); f.draw(); });
+      for (let i=0; i<Math.min(36, state.particles.length); i++) state.particles[i].draw();
+    }
 
     function tick(t){
       if (!calm && !prefersReduced) state.t += 1;
       ctx.clearRect(0,0,innerWidth,innerHeight);
+
       if (!calm && !prefersReduced) {
         state.filaments.forEach(f=>{ f.step(t); f.draw(); });
         state.particles.forEach(p=>{ p.step(); p.draw(); });
       } else {
-        // draw a faint still frame
-        state.filaments.forEach(f=>{ if (f.path.length<2) f.step(t); f.draw(); });
-        state.particles.slice(0, 40).forEach(p=>{ p.draw(); });
+        drawStill();
       }
       requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
 
     /* Subtle parallax on grid canvas */
-    let px=0, py=0;
     window.addEventListener('pointermove', (e)=>{
-      const dx = (e.clientX/innerWidth - .5) * 10;
-      const dy = (e.clientY/innerHeight - .5) * 10;
-      px = dx; py = dy; grid.style.transform = `translate(${dx}px, ${dy}px)`;
-    });
+      const dx = (e.clientX/innerWidth - .5) * 8;
+      const dy = (e.clientY/innerHeight - .5) * 8;
+      grid.style.transform = `translate(${dx}px, ${dy}px)`;
+    }, {passive:true});
 
     /* Accessibility: pause animations when tab hidden */
     document.addEventListener('visibilitychange', () => { calm = document.hidden || calm; });
+
   </script>
+
 </body>
 </html>
