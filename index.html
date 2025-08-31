@@ -312,7 +312,7 @@
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-7 9a7 7 0 0 1 14 0H5Z"/></svg>
             <h3>Contact</h3>
           </div>
-          <p>Drop a line: <a href="mailto:alec@darkwiretrancendental.com" class="underline">alec@darkwiretrancendental.com</a></p>
+          <p>Drop a line: <a href="mailto:darkwiretrancendental@proton.me" class="underline">alec@darkwiretrancendental.com</a></p>
           <p class="muted">PGP available on request.</p>
         </article>
       </div>
@@ -397,6 +397,30 @@
       PATH_LEN: 56             // filament trail length (trimmed from 64)
     };
 
+    // Recompute config dynamically based on size and preferences
+    function deviceProfile() {
+      const mobile = /Mobi|Android/i.test(navigator.userAgent) || innerWidth < 720;
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches || calm;
+      return { mobile, reduced, w: innerWidth, h: innerHeight };
+    }
+    function countsFor(profile) {
+      if (profile.reduced) return {PARTICLES: 0, FILAMENTS: 0};
+      if (profile.mobile) {
+        if (profile.w < 380) return {PARTICLES: 36, FILAMENTS: 5};
+        if (profile.w < 540) return {PARTICLES: 48, FILAMENTS: 6};
+        return {PARTICLES: 64, FILAMENTS: 7};
+      }
+      if (profile.w < 960) return {PARTICLES: 72, FILAMENTS: 8};
+      return {PARTICLES: 96, FILAMENTS: 10};
+    }
+    function applyCounts(profile) {
+      const c = countsFor(profile);
+      CONFIG.PARTICLES = c.PARTICLES;
+      CONFIG.FILAMENTS = c.FILAMENTS;
+      CONFIG.INFLUENCE_RADIUS = Math.max(260, Math.min(420, Math.floor(Math.min(innerWidth, innerHeight) * 0.45)));
+    }
+    
+
     const bg = document.getElementById('bg-canvas');
     const ctx = bg.getContext('2d');
     const grid = document.getElementById('grid-canvas');
@@ -433,6 +457,36 @@
     }
     window.addEventListener('resize', resize, {passive:true});
     resize();
+    // rAF-throttled resize handler with breakpoint awareness
+    let _resizeScheduled = false;
+    let _lastProfile = null;
+    let _lastKey = "";
+
+    function reinitIfNeeded() {
+      const profile = deviceProfile();
+      const key = `${profile.mobile}-${profile.reduced}-${profile.w>>4}-${profile.h>>4}`; // coarse bins
+      if (key !== _lastKey) {
+        applyCounts(profile);
+        initScene(); // rebuild arrays with new sizes
+        drawGrid();  // redraw grid with new dimensions
+        _lastKey = key;
+      }
+    }
+
+    window.addEventListener('resize', () => {
+      if (_resizeScheduled) return;
+      _resizeScheduled = true;
+      requestAnimationFrame(() => {
+        _resizeScheduled = false;
+        resize();        // handle DPR + canvas size
+        reinitIfNeeded();
+      });
+    }, {passive:true});
+
+    // First-run counts + scene init use the same path
+    _lastKey = "";
+    reinitIfNeeded();
+
 
     /* Parallax grid */
     function drawGrid() {
@@ -542,7 +596,7 @@
     initScene();
 
     window.addEventListener('mousemove', (e)=>{ state.pointer.x = e.clientX; state.pointer.y = e.clientY; }, {passive:true});
-    window.addEventListener('touchmove', (e)=>{ const t = e.touches[0]; state.pointer.x = t.clientX; state.pointer.y = t.clientY; }, {passive:true});
+    window.addEventListener('touchmove', (e)=>{ if (e.touches.length !== 1) return; const t = e.touches[0]; state.pointer.x = t.clientX; state.pointer.y = t.clientY; }, {passive:true});
 
     // When switching to calm, keep a faint still frame (no stepping) with fewer particles.
     function drawStill() {
@@ -566,6 +620,7 @@
 
     /* Subtle parallax on grid canvas */
     window.addEventListener('pointermove', (e)=>{
+      if (innerWidth < 720) return;
       const dx = (e.clientX/innerWidth - .5) * 8;
       const dy = (e.clientY/innerHeight - .5) * 8;
       grid.style.transform = `translate(${dx}px, ${dy}px)`;
