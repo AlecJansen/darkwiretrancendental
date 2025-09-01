@@ -3,208 +3,155 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0a0a0f" />
-  <meta name="description" content="Darkwire Trancendental — a sleek, cosmic, privacy‑first landing page." />
-  <title>darkwiretrancendental.com</title>
+  <meta name="theme-color" content="#07060a" />
+  <meta name="description" content="Darkwire Trancendental manages METATRON — a voidborn, celestial, brutally heavy dubstep project." />
+  <title>Darkwire Trancendental × METATRON</title>
+
+  <!-- Social preview -->
+  <meta property="og:title" content="METATRON • Darkwire Trancendental" />
+  <meta property="og:description" content="Sits between cosmic, divine, and terrifyingly heavy. Abyssal. Celestial. Colossal." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAAB..." />
+  <meta name="twitter:card" content="summary_large_image" />
+
   <style>
     /* ============================
-       CORE THEME
+       DUBSTEP THEME — abyssal / chromatic / ritualistic
        ============================ */
-    :root {
-      --bg: #08080c;
-      --bg-2: #0d0d14;
-      --text: #eaeaf6;
-      --muted: #a6a8c9;
-      --glass: rgba(255, 255, 255, 0.06);
-      --glass-2: rgba(255, 255, 255, 0.1);
-      --accent-1: #7b5cff; /* violet */
-      --accent-2: #00ffd1; /* aqua */
-      --accent-3: #ff2ea6; /* magenta */
-      --glow: 0 0 24px rgba(123, 92, 255, 0.6), 0 0 64px rgba(0, 255, 209, 0.2);
-      --radius: 18px;
-      --grid: rgba(255,255,255,0.06);
+    :root{
+      --bg:#07060a;
+      --bg-2:#0a0a12;
+      --text:#e9e9f7;
+      --muted:#9aa0c7;
+      --grid:rgba(255,255,255,.05);
+      --glass:rgba(255,255,255,.04);
+      --glass-2:rgba(255,255,255,.09);
+
+      /* Harsher palette for “monolithic” weight */
+      --accent-1:#8b5cff; /* spectral violet */
+      --accent-2:#00ffd1; /* toxic aqua */
+      --accent-3:#ff2ea6; /* brutal magenta */
+      --accent-4:#fffb91; /* chromatic flare for pulses */
+
+      --radius:18px;
+      --glow:0 0 24px rgba(139,92,255,.55), 0 0 64px rgba(0,255,209,.16);
     }
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
-    body {
-      margin: 0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-      color: var(--text);
-      background: radial-gradient(1200px 600px at 70% -10%, rgba(123, 92, 255, 0.15), transparent 60%),
-                  radial-gradient(900px 500px at 15% 0%, rgba(0, 255, 209, 0.12), transparent 60%),
-                  linear-gradient(180deg, var(--bg), var(--bg-2));
-      overflow-x: hidden;
-      letter-spacing: 0.2px;
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Inter, Roboto, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 70% -10%, rgba(139,92,255,.16), transparent 60%),
+        radial-gradient(900px 500px at 15% 0%, rgba(0,255,209,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+      overflow-x:hidden;
+      letter-spacing:.2px;
     }
+    a{color:inherit;text-decoration:none}
+    .container{width:min(1200px,92vw);margin:0 auto}
 
-    a { color: inherit; text-decoration: none; }
-    .container { width: min(1200px, 92vw); margin: 0 auto; }
+    /* Canvases */
+    #bg-canvas,#grid-canvas{position:fixed;inset:0;z-index:-2;display:block}
+    #grid-canvas{z-index:-1;opacity:.55;mix-blend-mode:screen}
 
-    /* Background canvas and grid */
-    #bg-canvas, #grid-canvas { position: fixed; inset: 0; z-index: -2; display: block; }
-    #grid-canvas { z-index: -1; opacity: .5; }
+    /* Header */
+    header{position:sticky;top:0;z-index:50;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);background:linear-gradient(to bottom, rgba(10,10,18,.7), transparent);border-bottom:1px solid rgba(255,255,255,.06)}
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
+    .brand{display:flex;align-items:center;gap:12px}
+    .brand svg{width:36px;height:36px;filter:drop-shadow(0 0 16px rgba(0,255,209,.35))}
+    .brand-name{font-weight:800;letter-spacing:1.4px;text-transform:lowercase;font-size:clamp(18px,3vw,22px)}
+    .chip{padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted);border:1px solid rgba(255,255,255,.1);background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02))}
 
-    /* ============================
-       HEADER
-       ============================ */
-    header {
-      position: sticky; top: 0; z-index: 50;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      background: linear-gradient(to bottom, rgba(10,10,15,0.7), transparent);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
-    }
-    .nav {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 0;
-    }
-    .brand {
-      display: flex; align-items: center; gap: 12px;
-    }
-    .brand svg { width: 34px; height: 34px; filter: drop-shadow(0 0 16px rgba(0,255,209,.35)); }
-    .brand-name {
-      font-weight: 700; letter-spacing: 1.2px;
-      text-transform: lowercase; font-size: clamp(18px, 3vw, 22px);
-    }
-    .chip {
-      padding: 6px 10px; border-radius: 999px; font-size: 12px; color: var(--muted);
-      border: 1px solid rgba(255,255,255,0.1);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-    }
+    .menu{display:flex;gap:14px;align-items:center}
+    .btn{padding:10px 14px;border-radius:12px;font-weight:700;font-size:14px;border:1px solid rgba(255,255,255,.14);background:var(--glass);transition:transform .18s ease, box-shadow .18s ease, background .18s ease}
+    .btn:hover{transform:translateY(-1px);box-shadow:var(--glow);background:var(--glass-2)}
+    .btn.primary{border:1px solid rgba(139,92,255,.35);background:linear-gradient(135deg, rgba(139,92,255,.28), rgba(0,255,209,.16))}
 
-    .menu { display: flex; gap: 14px; align-items: center; }
-    .btn {
-      padding: 10px 14px; border-radius: 12px; font-weight: 600; font-size: 14px;
-      border: 1px solid rgba(255,255,255,0.14); background: var(--glass);
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
-    }
-    .btn:hover { transform: translateY(-1px); box-shadow: var(--glow); background: var(--glass-2); }
-    .btn.primary {
-      border: 1px solid rgba(123,92,255,.35);
-      background: linear-gradient(135deg, rgba(123,92,255,.25), rgba(0,255,209,.16));
-    }
-
-    /* ============================
-       HERO
-       ============================ */
-    .hero { padding: 88px 0 40px; position: relative; }
-    .title {
-      font-size: clamp(36px, 6.2vw, 86px);
-      line-height: .95; font-weight: 800; margin: 0 0 20px;
-      letter-spacing: 1px; text-transform: lowercase;
+    /* Hero */
+    .hero{padding:88px 0 40px;position:relative}
+    .kicker{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted)}
+    .title{
+      font-size:clamp(38px,6.6vw,96px);
+      line-height:.92;font-weight:900;margin:8px 0 18px;letter-spacing:1px;text-transform:lowercase;
       background: conic-gradient(from 120deg at 50% 50%, var(--accent-2), var(--accent-1), var(--accent-3), var(--accent-2));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
-      filter: drop-shadow(0 0 18px rgba(0,255,209,.25));
+      -webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 0 18px rgba(0,255,209,.22));
     }
-    .tagline {
-      font-size: clamp(16px, 2.4vw, 20px); color: var(--muted);
-      max-width: 820px; line-height: 1.6;
+    .tagline{font-size:clamp(16px,2.4vw,20px);color:var(--muted);max-width:900px;line-height:1.65}
+
+    .hero-actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+    .underline{position:relative;display:inline-block}
+    .underline::after{
+      content:"";position:absolute;left:0;right:0;bottom:-2px;height:2px;
+      background:linear-gradient(90deg,var(--accent-2),transparent 20%,var(--accent-1) 60%,transparent 80%);
+      filter:drop-shadow(0 0 6px rgba(0,255,209,.75));
+      animation:spark 2.8s linear infinite
     }
+    @keyframes spark{0%{transform:translateX(-10%)}100%{transform:translateX(110%)}}
 
-    .hero-actions { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
-
-    /* Glitchy underline */
-    .underline {
-      position: relative; display: inline-block;
+    /* Cards */
+    .grid{display:grid;gap:16px;grid-template-columns:repeat(12,1fr);margin-top:48px}
+    .card{
+      grid-column:span 4;background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.1);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden;transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;isolation:isolate
     }
-    .underline::after {
-      content: ""; position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
-      background: linear-gradient(90deg, var(--accent-2), transparent 20%, var(--accent-1) 60%, transparent 80%);
-      filter: drop-shadow(0 0 6px rgba(0,255,209,.75));
-      animation: spark 2.8s linear infinite;
-    }
-    @keyframes spark { 0%{transform: translateX(-10%);} 100%{transform: translateX(110%);} }
+    .card:hover{transform:translateY(-3px);box-shadow:var(--glow);border-color:rgba(139,92,255,.35)}
+    .card h3{margin:4px 0 8px;font-size:18px}
+    .card p{margin:0;color:var(--muted);font-size:14px;line-height:1.55}
+    .icon{width:28px;height:28px;opacity:.85}
+    .card .shine{content:"";position:absolute;inset:-100% -40% auto;height:40%;background:radial-gradient(600px 120px at 20% 40%, rgba(255,255,255,.20), rgba(255,255,255,0));transform:rotate(8deg);pointer-events:none;mix-blend-mode:screen;animation:floatshine 7s ease-in-out infinite}
+    @keyframes floatshine{0%,100%{transform:translateY(0) rotate(8deg)}50%{transform:translateY(-12%) rotate(8deg)}}
 
-    /* ============================
-       PANELS / CARDS
-       ============================ */
-    .grid { display: grid; gap: 16px; grid-template-columns: repeat(12, 1fr); margin-top: 48px; }
-    .card {
-      grid-column: span 4;
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: var(--radius);
-      padding: 18px; position: relative; overflow: hidden;
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      isolation: isolate;
-    }
-    .card:hover { transform: translateY(-3px); box-shadow: var(--glow); border-color: rgba(123,92,255,.35); }
-    .card h3 { margin: 4px 0 8px; font-size: 18px; }
-    .card p { margin: 0; color: var(--muted); font-size: 14px; line-height: 1.55; }
-    .icon { width: 28px; height: 28px; opacity: .85; }
+    .span-6{grid-column:span 6}
+    .span-8{grid-column:span 8}
+    .span-12{grid-column:span 12}
 
-    .card .shine {
-      content: ""; position: absolute; inset: -100% -40% auto; height: 40%;
-      background: radial-gradient(600px 120px at 20% 40%, rgba(255,255,255,.20), rgba(255,255,255,0));
-      transform: rotate(8deg);
-      pointer-events: none; mix-blend-mode: screen;
-      animation: floatshine 7s ease-in-out infinite;
-    }
-    @keyframes floatshine { 0%,100%{transform: translateY(0) rotate(8deg);} 50%{transform: translateY(-12%) rotate(8deg);} }
+    /* Footer */
+    footer{padding:42px 0 80px;color:var(--muted);font-size:14px}
+    .footer-grid{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px}
 
-    /* Wide + Tall cards */
-    .span-6 { grid-column: span 6; }
-    .span-8 { grid-column: span 8; }
-    .span-12 { grid-column: span 12; }
-
-    /* ============================
-       FOOTER
-       ============================ */
-    footer { padding: 42px 0 80px; color: var(--muted); font-size: 14px; }
-    .footer-grid { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 16px; }
-
-    /* ============================
-       UTILITIES
-       ============================ */
-    .flex { display: flex; align-items: center; gap: 10px; }
-    .muted { color: var(--muted); }
-    .pill { padding: 6px 10px; border: 1px solid rgba(255,255,255,.12); border-radius: 999px; }
+    /* Utilities */
+    .flex{display:flex;align-items:center;gap:10px}
+    .muted{color:var(--muted)}
+    .pill{padding:6px 10px;border:1px solid rgba(255,255,255,.12);border-radius:999px}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace}
 
     /* Responsive */
-    @media (max-width: 980px) {
-      .card { grid-column: span 6; }
-      .span-8, .span-12 { grid-column: span 12; }
-    }
-    @media (max-width: 680px) { .card { grid-column: span 12; } }
+    @media (max-width:980px){ .card{grid-column:span 6} .span-8,.span-12{grid-column:span 12} }
+    @media (max-width:680px){ .card{grid-column:span 12} }
 
-    /* Neon caret and selection */
-    ::selection { background: rgba(0,255,209,.3); color: #fff; }
-    input, textarea { caret-color: var(--accent-2); }
-
-    /* Custom cursor */
-    body { cursor: url('data:image/svg+xml;utf8,\
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">\
-        <path fill="%23a0ffe9" d="M3 2l7 7-4 1-1 4-2-12z"/>\
-      </svg>') 1 1, crosshair; }
+    /* Selection + cursor */
+    ::selection{background:rgba(0,255,209,.3);color:#fff}
+    input,textarea{caret-color:var(--accent-2)}
+    body{cursor:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23a0ffe9" d="M3 2l7 7-4 1-1 4-2-12z"/></svg>') 1 1, crosshair}
   </style>
 </head>
 <body>
-  <!-- Background FX canvases -->
+  <!-- FX -->
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
   <canvas id="grid-canvas" aria-hidden="true"></canvas>
 
   <header>
     <div class="container nav">
       <div class="brand" aria-label="site brand">
-        <!-- Inline SVG mark: darkwire sigil -->
+        <!-- Sigil -->
         <svg viewBox="0 0 64 64" role="img" aria-label="Darkwire sigil">
           <defs>
             <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#00ffd1"/>
-              <stop offset="100%" stop-color="#7b5cff"/>
+              <stop offset="0%" stop-color="#00ffd1"/><stop offset="100%" stop-color="#8b5cff"/>
             </linearGradient>
           </defs>
           <path d="M8 8l20 8 8 20-20-8-8-20zm28 4 8 20 12 12-20-8-12-12 12-12z" fill="url(#g1)"/>
-          <circle cx="20" cy="20" r="3" fill="#00ffd1"/>
-          <circle cx="44" cy="44" r="3" fill="#7b5cff"/>
+          <circle cx="20" cy="20" r="3" fill="#00ffd1"/><circle cx="44" cy="44" r="3" fill="#8b5cff"/>
         </svg>
         <div class="brand-name">darkwire<span class="muted">trancendental</span></div>
-        <div class="chip" title="privacy‑forward">private by design</div>
+        <div class="chip" title="ritual-grade">metatron management</div>
       </div>
       <nav class="menu" aria-label="primary">
-        <a class="btn" href="#vision">Vision</a>
-        <a class="btn" href="#stack">Stack</a>
+        <a class="btn" href="#metatron">Metatron</a>
+        <a class="btn" href="#lore">Lore</a>
         <a class="btn" href="#contact">Contact</a>
         <a class="btn primary" href="#enter">Enter</a>
       </nav>
@@ -213,106 +160,112 @@
 
   <main>
     <section class="hero container" id="enter">
-      <h1 class="title">Woven light. Silent signal. <span class="underline">Darkwire</span>.</h1>
-      <p class="tagline">A minimalist portal for maximal energy. Hand‑built hosting, self‑sovereign services, and a touch of the weird. Step through, explore a living canvas, and keep what’s yours, yours.</p>
+      <div class="kicker mono">voidborn • celestial • colossal</div>
+      <h1 class="title">
+        METATRON — <span class="underline">abyssal</span> energy carved in light.
+      </h1>
+      <p class="tagline">
+        Darkwire Trancendental manages <strong>METATRON</strong>, a dubstep entity that sits between the <em>cosmic</em>, the <em>sacred</em>, and the <em>terrifyingly heavy</em>.
+        Ominous. Arcane. Resonant. Built for rooms that want to fracture.
+      </p>
       <div class="hero-actions">
-        <a class="btn primary" href="#vision">Explore the vision</a>
-        <a class="btn" href="#contact">Ping the operator</a>
-        <span class="pill">v0.1 alpha</span>
+        <a class="btn primary" href="https://soundcloud.com/metatrondubs" target="_blank" rel="noopener">Listen on SoundCloud</a>
+        <a class="btn" href="https://instagram.com/metatrondubstep" target="_blank" rel="noopener">@metatrondubstep</a>
+        <a class="btn" href="#contact">Contact / Bookings</a>
+        <span class="pill">private by design</span>
       </div>
 
-      <div class="grid" style="margin-top: 40px;">
+      <div class="grid" style="margin-top:40px">
         <article class="card span-8">
           <div class="shine" aria-hidden="true"></div>
           <div class="flex">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2L2 7l10 5 10-5-10-5Zm0 7L4 5.5v9L12 18l8-3.5v-9L12 9Z"/></svg>
-            <h3>Wirespace</h3>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2 2 7l10 5 10-5-10-5Zm0 7L4 5.5v9L12 18l8-3.5v-9L12 9Z"/></svg>
+            <h3>Signal-bound Canvas</h3>
           </div>
-          <p>A reactive playground. The background listens to your cursor and breathes with time. Try dragging, tapping, or idling. It adapts.</p>
+          <p>A reactive “wires + particles” field tuned for weight: denser paths, darker glass, ritual glitches. Click or tap to pulse.</p>
         </article>
-        
-        <article class="card">
-          <div class="shine"></div>
-          <div class="flex">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 4h16v4H4zM4 10h16v10H4z"/></svg>
-            <h3>Glass panels</h3>
-          </div>
-          <p>Soft glass, neon edges, and clean type. All in one file. No external libraries.</p>
-        </article>
-        
-        <article class="card">
-          <div class="shine"></div>
-          <div class="flex">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 .001 18A9 9 0 0 0 12 3Zm0 4a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z"/></svg>
-            <h3>Subtle animations</h3>
-          </div>
-          <p>Motion where it helps. Idle glow, parallax grid, tasteful glitch.
-          </p>
-        </article>
-      </div>
-    </section>
 
-    <section class="container" id="vision" style="margin-top: 18px;">
-      <div class="grid">
-        <article class="card span-12">
-          <div class="shine"></div>
-          <div class="flex" style="justify-content: space-between; align-items: start; gap: 16px; flex-wrap: wrap;">
-            <div class="flex" style="gap:12px;">
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm8.5-4.5A1.5 1.5 0 1 0 12 9a1.5 1.5 0 0 0-1.5-1.5ZM7 17h10a1 1 0 0 0 0-2H7a1 1 0 1 0 0 2Z"/></svg>
-              <h3 style="margin:0;">What lives here</h3>
-            </div>
-            <div class="pill">self‑hosted • encrypted paths • minimal logs</div>
-          </div>
-          <p style="margin-top:10px;">Small footprint, big vibe. Expect static pages with dynamic art, experimental utilities, and links to private services. If it looks calm, good. Under the hood, it’s all signal.</p>
-          <div class="grid" style="margin-top: 10px;">
-            <div class="card"><div class="shine"></div><h3>Privacy</h3><p>Zero trackers. Local fonts. No analytics. Keep your trail light.</p></div>
-            <div class="card"><div class="shine"></div><h3>Performance</h3><p>Pure HTML, CSS, and vanilla JS. First paint is fast, even on weak hardware.</p></div>
-            <div class="card"><div class="shine"></div><h3>Style</h3><p>Neon‑meets‑astral. Clean grid, soft shadows, crisp geometry.</p></div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="container" id="stack" style="margin-top: 18px;">
-      <div class="grid">
-        <article class="card span-6">
-          <div class="shine"></div>
-          <div class="flex">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 7l8-4 8 4-8 4-8-4Zm0 5l8 4 8-4m-16 5l8 4 8-4"/></svg>
-            <h3>Stack</h3>
-          </div>
-          <p>Single file. Responsive grid. Canvas FX with requestAnimationFrame. Accessible by default.</p>
-          <ul class="muted" style="margin-top:8px; line-height:1.6; padding-left: 18px;">
-            <li>No external JS</li>
-            <li>Prefers‑reduced‑motion friendly</li>
-            <li>Works offline if served as a PWA later</li>
-          </ul>
-        </article>
-        <article class="card span-6">
+        <article class="card">
           <div class="shine"></div>
           <div class="flex">
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 12h18M12 3v18"/></svg>
             <h3>Switches</h3>
           </div>
-          <p>Toggle flavors without touching the CSS. Click to cycle palettes.</p>
-          <div class="hero-actions" style="margin-top:10px;">
+          <p>Cycle palette • Trigger glitch • Calm mode for low-motion setups.</p>
+          <div class="hero-actions" style="margin-top:10px">
             <button class="btn" id="themeCycle" type="button">Cycle theme</button>
-            <button class="btn" id="glitchOnce" type="button">Glitch logo</button>
+            <button class="btn" id="glitchOnce" type="button">Ritual glitch</button>
             <button class="btn" id="calmMode" type="button" aria-pressed="false">Calm mode</button>
           </div>
+        </article>
+
+        <article class="card">
+          <div class="shine"></div>
+          <div class="flex">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 3a9 9 0 1 0 .001 18A9 9 0 0 0 12 3Zm0 4a1 1 0 0 1 1 1v3h3a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1V8a1 1 0 0 1 1-1Z"/></svg>
+            <h3>Performance</h3>
+          </div>
+          <p>Pure HTML/CSS/JS. Responsive. Prefers-reduced-motion aware. No libraries.</p>
         </article>
       </div>
     </section>
 
-    <section class="container" id="contact" style="margin-top: 18px;">
+    <section class="container" id="metatron" style="margin-top:18px">
       <div class="grid">
         <article class="card span-12">
           <div class="shine"></div>
-          <div class="flex" style="gap: 10px; align-items: center;">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-7 9a7 7 0 0 1 14 0H5Z"/></svg>
-            <h3>Contact</h3>
+          <div class="flex" style="justify-content:space-between;align-items:start;gap:16px;flex-wrap:wrap">
+            <div class="flex" style="gap:12px">
+              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 12a10 10 0 1 1 20 0 10 10 0 0 1-20 0Zm8.5-4.5A1.5 1.5 0 1 0 12 9a1.5 1.5 0 0 0-1.5-1.5Z"/></svg>
+              <h3 style="margin:0">METATRON • Project Notes</h3>
+            </div>
+            <div class="pill">abyssal • arcane • ritualistic</div>
           </div>
-          <p>Drop a line: <a href="mailto:darkwiretrancendental@proton.me" class="underline">alec@darkwiretrancendental.com</a></p>
+          <p style="margin-top:10px">
+            Voidborn design language with celestial edges. Titan-like dynamics, bladed sound, fractal motion. If it feels <em>apocalyptic</em> and <em>esoteric</em> at once, it’s on brand.
+          </p>
+          <ul class="muted" style="margin-top:8px;line-height:1.6;padding-left:18px">
+            <li>Visual lexicon: <span class="mono">obsidian / chromatic / geometric / interdimensional</span></li>
+            <li>Motion: relentless yet controlled; pulses over gimmicks</li>
+            <li>Accessibility: calm mode & reduced-motion support</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="container" id="lore" style="margin-top:18px">
+      <div class="grid">
+        <article class="card span-6">
+          <div class="shine"></div>
+          <div class="flex">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 7l8-4 8 4-8 4-8-4Zm0 5l8 4 8-4m-16 5l8 4 8-4"/></svg>
+            <h3>Wires & Rites</h3>
+          </div>
+          <p>Mechanized geometry meets sacred noise. Energy flows along chromatic filaments, accumulating into monolithic forms.</p>
+        </article>
+
+        <article class="card span-6">
+          <div class="shine"></div>
+          <div class="flex">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M3 12h18M12 3v18"/></svg>
+            <h3>The System</h3>
+          </div>
+          <p>Darkwire Trancendental handles the orbit: comms, routing, privacy, and the quiet math that keeps the signal clean.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="container" id="contact" style="margin-top:18px">
+      <div class="grid">
+        <article class="card span-12">
+          <div class="shine"></div>
+          <div class="flex" style="gap:10px;align-items:center">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 13a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm-7 9a7 7 0 0 1 14 0H5Z"/></svg>
+            <h3>Contact / Bookings</h3>
+          </div>
+          <p>Email: <a class="underline" href="mailto:darkwiretrancendental@proton.me">darkwiretrancendental@proton.me</a></p>
+          <p>Instagram: <a class="underline" href="https://instagram.com/metatrondubstep" target="_blank" rel="noopener">@metatrondubstep</a></p>
+          <p>SoundCloud: <a class="underline" href="https://soundcloud.com/metatrondubs" target="_blank" rel="noopener">soundcloud.com/metatrondubs</a></p>
           <p class="muted">PGP available on request.</p>
         </article>
       </div>
@@ -321,37 +274,35 @@
 
   <footer>
     <div class="container footer-grid">
-      <div>© <span id="year"></span> darkwiretrancendental.com</div>
+      <div>© <span id="year"></span> Darkwire Trancendental • METATRON</div>
       <div class="muted">Built with HTML, CSS, and a bit of math.</div>
     </div>
   </footer>
 
   <!-- ============================
-       FX SCRIPTS
+       FX SCRIPTS (heavier flavor)
        ============================ -->
-  
   <script>
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    /* Year */
     document.getElementById('year').textContent = new Date().getFullYear();
 
     /* Theme cycler */
     const palettes = [
-      {a1:'#7b5cff', a2:'#00ffd1', a3:'#ff2ea6'}, // default
-      {a1:'#66e2ff', a2:'#fffb91', a3:'#ff7ab6'}, // aurora
-      {a1:'#8fffad', a2:'#7aa2ff', a3:'#b48ef7'}, // mist
+      {a1:'#8b5cff', a2:'#00ffd1', a3:'#ff2ea6'}, // default ritual
+      {a1:'#66e2ff', a2:'#fffb91', a3:'#ff7ab6'}, // chromatic flare
+      {a1:'#8fffad', a2:'#7aa2ff', a3:'#b48ef7'}, // astral mist
       {a1:'#ffd29e', a2:'#9ef7ff', a3:'#ff9ef4'}  // dawn
     ];
-    let idx = 0;
-    function cacheAccents() {
+    let idx = 0, A1, A2, A3;
+    function cacheAccents(){
       const cs = getComputedStyle(document.documentElement);
       A1 = cs.getPropertyValue('--accent-1').trim();
       A2 = cs.getPropertyValue('--accent-2').trim();
       A3 = cs.getPropertyValue('--accent-3').trim();
     }
-    document.getElementById('themeCycle').addEventListener('click', () => {
-      idx = (idx + 1) % palettes.length;
+    cacheAccents();
+    document.getElementById('themeCycle').addEventListener('click',()=>{
+      idx = (idx+1)%palettes.length;
       const p = palettes[idx];
       document.documentElement.style.setProperty('--accent-1', p.a1);
       document.documentElement.style.setProperty('--accent-2', p.a2);
@@ -359,256 +310,188 @@
       cacheAccents();
     });
 
-    /* Calm mode toggle: freezes background animation, lowers glow */
+    /* Calm mode toggle */
     const calmBtn = document.getElementById('calmMode');
     let calm = false;
-    calmBtn.addEventListener('click', () => {
+    calmBtn.addEventListener('click',()=>{
       calm = !calm; calmBtn.setAttribute('aria-pressed', String(calm));
       calmBtn.textContent = calm ? 'Calm mode: on' : 'Calm mode';
     });
 
-    /* Glitch effect on brand */
+    /* Ritual glitch (a bit harsher) */
     const brand = document.querySelector('.brand-name');
-    const glitchOnce = () => {
+    function ritualGlitch(mult=1){
       const original = brand.textContent;
-      const seq = [40, 80, 120, 200];
-      const chars = '!@#$%^&*()_+{}[]<>/\|~';
-      seq.forEach((t, i) => setTimeout(() => {
-        brand.style.filter = 'drop-shadow(0 0 30px rgba(255,46,166,.6)) hue-rotate(40deg)';
-        brand.style.transform = `translate(${(i%2?1:-1)*2}px, ${(i%2?1:-1)}px)`;
-        brand.textContent = original.split('').map(c => Math.random() < .15 ? chars[Math.floor(Math.random()*chars.length)] : c).join('');
+      const seq = [40, 80, 120, 200, 320].map(t=>t*mult);
+      const chars = '!@#$%^&*()_+{}[]<>/\\|~▮▯▰▱▢';
+      seq.forEach((t,i)=>setTimeout(()=>{
+        brand.style.filter = 'drop-shadow(0 0 36px rgba(255,46,166,.7)) hue-rotate(54deg)';
+        brand.style.transform = `translate(${(i%2?1:-1)*3}px, ${(i%2?1:-1)*1.5}px) skew(${(i%2?1:-1)*0.6}deg)`;
+        brand.textContent = original.split('').map(c=>Math.random()<.2?chars[Math.floor(Math.random()*chars.length)]:c).join('');
       }, t));
-      setTimeout(() => { brand.textContent = original; brand.style.filter = ''; brand.style.transform = ''; }, Math.max(...seq)+80);
-    };
-    document.getElementById('glitchOnce').addEventListener('click', glitchOnce);
+      setTimeout(()=>{ brand.textContent = original; brand.style.filter=''; brand.style.transform=''; }, Math.max(...seq)+100);
+    }
+    document.getElementById('glitchOnce').addEventListener('click',()=>ritualGlitch());
 
-    /* ============================
-       CANVAS: ORGANIC WIRES + PARTICLES (optimized)
-       ============================ */
+    /* Canvas setup (denser / heavier) */
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
     const CONFIG = {
-      PARTICLES: prefersReduced ? 0 : (isMobile ? 60 : 90),
-      FILAMENTS: prefersReduced ? 0 : (isMobile ? 7 : 10),
-      PULL: 0.0006,            // attraction toward pointer (reduced from 0.002)
-      MAX_SPEED: 1.25,         // soft cap on particle speed (CSS px / frame)
-      DRAG: 0.985,             // slight damping
-      SHADOW_BLUR: 6,          // cheaper than 10
-      INFLUENCE_RADIUS: 380,   // px radius where pointer has meaningful pull
-      PATH_LEN: 56             // filament trail length (trimmed from 64)
+      PARTICLES: prefersReduced ? 0 : (isMobile ? 60 : 110),
+      FILAMENTS: prefersReduced ? 0 : (isMobile ? 7 : 12),
+      PULL: 0.0008,
+      MAX_SPEED: 1.35,
+      DRAG: 0.984,
+      SHADOW_BLUR: 7,
+      INFLUENCE_RADIUS: 420,
+      PATH_LEN: 62
     };
 
-    // Recompute config dynamically based on size and preferences
-    function deviceProfile() {
+    function deviceProfile(){
       const mobile = /Mobi|Android/i.test(navigator.userAgent) || innerWidth < 720;
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches || calm;
-      return { mobile, reduced, w: innerWidth, h: innerHeight };
+      return {mobile,reduced,w:innerWidth,h:innerHeight};
     }
-    function countsFor(profile) {
-      if (profile.reduced) return {PARTICLES: 0, FILAMENTS: 0};
-      if (profile.mobile) {
-        if (profile.w < 380) return {PARTICLES: 36, FILAMENTS: 5};
-        if (profile.w < 540) return {PARTICLES: 48, FILAMENTS: 6};
-        return {PARTICLES: 64, FILAMENTS: 7};
+    function countsFor(p){
+      if (p.reduced) return {PARTICLES:0,FILAMENTS:0};
+      if (p.mobile){
+        if (p.w<380) return {PARTICLES:36,FILAMENTS:5};
+        if (p.w<540) return {PARTICLES:48,FILAMENTS:6};
+        return {PARTICLES:64,FILAMENTS:7};
       }
-      if (profile.w < 960) return {PARTICLES: 72, FILAMENTS: 8};
-      return {PARTICLES: 96, FILAMENTS: 10};
+      if (p.w<960) return {PARTICLES:80,FILAMENTS:9};
+      return {PARTICLES:110,FILAMENTS:12};
     }
-    function applyCounts(profile) {
-      const c = countsFor(profile);
+    function applyCounts(p){
+      const c = countsFor(p);
       CONFIG.PARTICLES = c.PARTICLES;
       CONFIG.FILAMENTS = c.FILAMENTS;
-      CONFIG.INFLUENCE_RADIUS = Math.max(260, Math.min(420, Math.floor(Math.min(innerWidth, innerHeight) * 0.45)));
+      CONFIG.INFLUENCE_RADIUS = Math.max(280, Math.min(460, Math.floor(Math.min(innerWidth, innerHeight)*0.48)));
     }
-    
 
     const bg = document.getElementById('bg-canvas');
     const ctx = bg.getContext('2d');
     const grid = document.getElementById('grid-canvas');
     const gtx = grid.getContext('2d');
+    let W,H,DPR;
 
-    let W, H, DPR;
     const state = {
-      t: 0,
-      pointer: {x: innerWidth/2, y: innerHeight/2, vx:0, vy:0},
-      particles: [],
-      filaments: []
+      t:0,
+      pointer:{x:innerWidth/2,y:innerHeight/2,vx:0,vy:0},
+      particles:[],
+      filaments:[],
+      pulse:0
     };
 
-    let A1, A2, A3;
-    cacheAccents();
-
-    function resize() {
-      DPR = Math.min(window.devicePixelRatio || 1, 2);
-      W = Math.floor(innerWidth * DPR);
-      H = Math.floor(innerHeight * DPR);
-
-      // Set canvas backing store and CSS size
-      bg.width = W; bg.height = H;
-      grid.width = W; grid.height = H;
-      bg.style.width = innerWidth + 'px';
-      bg.style.height = innerHeight + 'px';
-      grid.style.width = innerWidth + 'px';
-      grid.style.height = innerHeight + 'px';
-
-      // Draw using CSS pixels
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-      gtx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    function resize(){
+      DPR = Math.min(window.devicePixelRatio||1, 2);
+      W = Math.floor(innerWidth*DPR); H = Math.floor(innerHeight*DPR);
+      bg.width=W;bg.height=H;grid.width=W;grid.height=H;
+      bg.style.width=innerWidth+'px'; bg.style.height=innerHeight+'px';
+      grid.style.width=innerWidth+'px'; grid.style.height=innerHeight+'px';
+      ctx.setTransform(DPR,0,0,DPR,0,0); gtx.setTransform(DPR,0,0,DPR,0,0);
       drawGrid();
     }
     window.addEventListener('resize', resize, {passive:true});
     resize();
-    // rAF-throttled resize handler with breakpoint awareness
-    let _resizeScheduled = false;
-    let _lastProfile = null;
-    let _lastKey = "";
 
-    function reinitIfNeeded() {
-      const profile = deviceProfile();
-      const key = `${profile.mobile}-${profile.reduced}-${profile.w>>4}-${profile.h>>4}`; // coarse bins
-      if (key !== _lastKey) {
-        applyCounts(profile);
-        initScene(); // rebuild arrays with new sizes
-        drawGrid();  // redraw grid with new dimensions
-        _lastKey = key;
-      }
+    let _key=""; function reinitIfNeeded(){
+      const p = deviceProfile(); const key = `${p.mobile}-${p.reduced}-${p.w>>4}-${p.h>>4}`;
+      if (key!==_key){ applyCounts(p); initScene(); drawGrid(); _key=key; }
     }
-
-    window.addEventListener('resize', () => {
-      if (_resizeScheduled) return;
-      _resizeScheduled = true;
-      requestAnimationFrame(() => {
-        _resizeScheduled = false;
-        resize();        // handle DPR + canvas size
-        reinitIfNeeded();
-      });
+    window.addEventListener('resize', ()=>{
+      requestAnimationFrame(()=>{ resize(); reinitIfNeeded(); });
     }, {passive:true});
-
-    // First-run counts + scene init use the same path
-    _lastKey = "";
     reinitIfNeeded();
 
-
-    /* Parallax grid */
-    function drawGrid() {
+    function drawGrid(){
       gtx.clearRect(0,0,innerWidth,innerHeight);
-      const step = 24; // px
-      gtx.beginPath();
-      gtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid');
-      for (let x = 0; x < innerWidth; x += step) { gtx.moveTo(x, 0); gtx.lineTo(x, innerHeight); }
-      for (let y = 0; y < innerHeight; y += step) { gtx.moveTo(0, y); gtx.lineTo(innerWidth, y); }
+      const step = 22; // slightly denser
+      gtx.beginPath(); gtx.strokeStyle = getComputedStyle(document.documentElement).getPropertyValue('--grid');
+      for(let x=0;x<innerWidth;x+=step){gtx.moveTo(x,0);gtx.lineTo(x,innerHeight)}
+      for(let y=0;y<innerHeight;y+=step){gtx.moveTo(0,y);gtx.lineTo(innerWidth,y)}
       gtx.stroke();
 
-      // vignette
+      // darker vignette
       const grd = gtx.createRadialGradient(innerWidth/2, innerHeight/1.2, 50, innerWidth/2, innerHeight/1.2, Math.max(innerWidth, innerHeight));
-      grd.addColorStop(0, 'rgba(0,0,0,0)');
-      grd.addColorStop(1, 'rgba(0,0,0,0.35)');
+      grd.addColorStop(0,'rgba(0,0,0,0)'); grd.addColorStop(1,'rgba(0,0,0,.42)');
       gtx.fillStyle = grd; gtx.fillRect(0,0,innerWidth,innerHeight);
     }
 
-    /* Particles */
-    class Particle {
-      constructor(x, y) {
-        this.x = x; this.y = y;
-        this.vx = (Math.random() - .5) * 0.5;
-        this.vy = (Math.random() - .5) * 0.5;
-        this.life = 0; this.max = 700 + Math.random() * 600;
-        this.size = 1 + Math.random() * 1.1;
-      }
-      step() {
-        const p = state.pointer;
-        const dx = p.x - this.x;
-        const dy = p.y - this.y;
-        const d2 = dx*dx + dy*dy;
-        const radius2 = CONFIG.INFLUENCE_RADIUS * CONFIG.INFLUENCE_RADIUS;
-        if (d2 < radius2) {
-          // falloff: stronger when closer, smoothly to zero at radius
-          const fall = 1 - (d2 / radius2);
-          this.vx += dx * CONFIG.PULL * fall;
-          this.vy += dy * CONFIG.PULL * fall;
-        }
+    function cacheAccents(){ /* re-declare to rebind to new vars */ 
+      const cs = getComputedStyle(document.documentElement);
+      A1 = cs.getPropertyValue('--accent-1').trim();
+      A2 = cs.getPropertyValue('--accent-2').trim();
+      A3 = cs.getPropertyValue('--accent-3').trim();
+    }
+    cacheAccents();
 
-        // drag and clamp
-        this.vx *= CONFIG.DRAG;
-        this.vy *= CONFIG.DRAG;
-        const speed = Math.hypot(this.vx, this.vy);
-        if (speed > CONFIG.MAX_SPEED) {
-          const s = CONFIG.MAX_SPEED / speed;
-          this.vx *= s; this.vy *= s;
-        }
-
-        this.x += this.vx; this.y += this.vy; this.life++;
-        if (this.x < -50 || this.y < -50 || this.x > innerWidth+50 || this.y > innerHeight+50 || this.life > this.max) this.reset();
+    class Particle{
+      constructor(x,y){ this.x=x; this.y=y; this.vx=(Math.random()-.5)*.5; this.vy=(Math.random()-.5)*.5; this.life=0; this.max=700+Math.random()*600; this.size=1+Math.random()*1.1; }
+      step(){
+        const p = state.pointer, dx=p.x-this.x, dy=p.y-this.y;
+        const d2 = dx*dx + dy*dy, r2 = CONFIG.INFLUENCE_RADIUS*CONFIG.INFLUENCE_RADIUS;
+        if(d2<r2){ const fall = 1-(d2/r2); this.vx+=dx*CONFIG.PULL*fall; this.vy+=dy*CONFIG.PULL*fall; }
+        this.vx*=CONFIG.DRAG; this.vy*=CONFIG.DRAG;
+        const speed=Math.hypot(this.vx,this.vy); if(speed>CONFIG.MAX_SPEED){ const s=CONFIG.MAX_SPEED/speed; this.vx*=s; this.vy*=s; }
+        this.x+=this.vx; this.y+=this.vy; this.life++;
+        if(this.x<-50||this.y<-50||this.x>innerWidth+50||this.y>innerHeight+50||this.life>this.max) this.reset();
       }
-      reset() {
-        this.x = Math.random() * innerWidth;
-        this.y = Math.random() * innerHeight;
-        this.life = 0; this.vx = (Math.random() - .5) * 0.5; this.vy = (Math.random() - .5) * 0.5;
+      reset(){ this.x=Math.random()*innerWidth; this.y=Math.random()*innerHeight; this.life=0; this.vx=(Math.random()-.5)*.5; this.vy=(Math.random()-.5)*.5; }
+      draw(){
+        ctx.beginPath(); ctx.arc(this.x,this.y,this.size + state.pulse*0.3,0,Math.PI*2);
+        ctx.fillStyle = A2 + '99'; ctx.shadowColor=A2; ctx.shadowBlur=7 + state.pulse*2; ctx.fill(); ctx.shadowBlur=0;
       }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2);
-        // Use 8-digit hex for alpha if supported; otherwise fallback to rgba.
-        try {
-          ctx.fillStyle = A2 + '99'; // ~60% opacity
-        } catch {
-          ctx.fillStyle = 'rgba(0,0,0,0.5)';
-        }
-        ctx.shadowColor = A2; ctx.shadowBlur = CONFIG.SHADOW_BLUR;
-        ctx.fill(); ctx.shadowBlur = 0;
+    }
+    class Filament{
+      constructor(seed){ this.seed=seed; this.path=[]; this.t=Math.random()*1000; }
+      step(time){
+        const speed = calm || prefersReduced ? 0.0007 : 0.0016;
+        this.t += speed * (1 + Math.sin(time*0.00022));
+        const amp = 78 + state.pulse*4;
+        const cx = innerWidth*(0.2+0.6*(this.seed%1));
+        const cy = innerHeight*(0.2+0.6*((this.seed*1.3)%1));
+        const x = cx + Math.cos(this.t*2 + this.seed*6.283)*amp + (state.pointer.x - innerWidth/2)*0.022;
+        const y = cy + Math.sin(this.t*3 + this.seed*6.283)*amp + (state.pointer.y - innerHeight/2)*0.022;
+        this.path.push({x,y}); if(this.path.length>CONFIG.PATH_LEN) this.path.shift();
+      }
+      draw(){
+        if(this.path.length<2) return;
+        const g = ctx.createLinearGradient(this.path[0].x,this.path[0].y,this.path[this.path.length-1].x,this.path[this.path.length-1].y);
+        g.addColorStop(0,A1); g.addColorStop(1,A3);
+        ctx.lineWidth = 1.4 + state.pulse*0.2; ctx.strokeStyle=g;
+        ctx.beginPath(); for(let i=0;i<this.path.length;i++){ const p=this.path[i]; if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); }
+        ctx.shadowColor=A1; ctx.shadowBlur=10 + state.pulse*2; ctx.stroke(); ctx.shadowBlur=0;
       }
     }
 
-    /* Filaments (flowing wires) */
-    class Filament {
-      constructor(seed) {
-        this.seed = seed; this.path = []; this.t = Math.random()*1000;
-      }
-      step(time) {
-        const speed = calm || prefersReduced ? 0.0007 : 0.0015;
-        this.t += speed * (1 + Math.sin(time * 0.0002));
-        const amp = 72;
-        const cx = innerWidth * (0.2 + 0.6 * (this.seed % 1));
-        const cy = innerHeight * (0.2 + 0.6 * ((this.seed*1.3) % 1));
-        const x = cx + Math.cos(this.t*2 + this.seed*6.283) * amp + (state.pointer.x - innerWidth/2) * 0.02;
-        const y = cy + Math.sin(this.t*3 + this.seed*6.283) * amp + (state.pointer.y - innerHeight/2) * 0.02;
-        this.path.push({x,y}); if (this.path.length > CONFIG.PATH_LEN) this.path.shift();
-      }
-      draw() {
-        if (this.path.length < 2) return;
-        const grad = ctx.createLinearGradient(this.path[0].x, this.path[0].y, this.path[this.path.length-1].x, this.path[this.path.length-1].y);
-        grad.addColorStop(0, A1);
-        grad.addColorStop(1, A3);
-        ctx.lineWidth = 1.25;
-        ctx.strokeStyle = grad;
-        ctx.beginPath();
-        for (let i=0;i<this.path.length;i++) {
-          const p = this.path[i];
-          if (i===0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
-        }
-        ctx.shadowColor = A1; ctx.shadowBlur = 10; ctx.stroke(); ctx.shadowBlur = 0;
-      }
-    }
-
-    function initScene() {
-      state.particles = Array.from({length: CONFIG.PARTICLES}, () => new Particle(Math.random()*innerWidth, Math.random()*innerHeight));
-      state.filaments = Array.from({length: CONFIG.FILAMENTS}, (_,i) => new Filament((i+1)/CONFIG.FILAMENTS));
+    function initScene(){
+      state.particles = Array.from({length:CONFIG.PARTICLES}, ()=>new Particle(Math.random()*innerWidth, Math.random()*innerHeight));
+      state.filaments = Array.from({length:CONFIG.FILAMENTS}, (_,i)=>new Filament((i+1)/CONFIG.FILAMENTS));
     }
     initScene();
 
-    window.addEventListener('mousemove', (e)=>{ state.pointer.x = e.clientX; state.pointer.y = e.clientY; }, {passive:true});
-    window.addEventListener('touchmove', (e)=>{ if (e.touches.length !== 1) return; const t = e.touches[0]; state.pointer.x = t.clientX; state.pointer.y = t.clientY; }, {passive:true});
+    window.addEventListener('mousemove', e=>{ state.pointer.x=e.clientX; state.pointer.y=e.clientY; }, {passive:true});
+    window.addEventListener('touchmove', e=>{ if(e.touches.length!==1) return; const t=e.touches[0]; state.pointer.x=t.clientX; state.pointer.y=t.clientY; }, {passive:true});
 
-    // When switching to calm, keep a faint still frame (no stepping) with fewer particles.
-    function drawStill() {
-      state.filaments.forEach(f=>{ if (f.path.length<2) f.step(state.t); f.draw(); });
-      for (let i=0; i<Math.min(36, state.particles.length); i++) state.particles[i].draw();
+    // Pulse on click/tap — simulates a “drop”
+    function triggerPulse(){
+      state.pulse = Math.min(1, state.pulse + 0.9);
+      ritualGlitch(0.7);
+    }
+    window.addEventListener('pointerdown', triggerPulse, {passive:true});
+
+    function drawStill(){
+      state.filaments.forEach(f=>{ if(f.path.length<2) f.step(state.t); f.draw(); });
+      for(let i=0;i<Math.min(36,state.particles.length);i++) state.particles[i].draw();
     }
 
     function tick(t){
-      if (!calm && !prefersReduced) state.t += 1;
-      ctx.clearRect(0,0,innerWidth,innerHeight);
+      if(!calm && !prefersReduced) state.t += 1;
+      // decay pulse
+      state.pulse *= 0.9;
 
-      if (!calm && !prefersReduced) {
+      ctx.clearRect(0,0,innerWidth,innerHeight);
+      if(!calm && !prefersReduced){
         state.filaments.forEach(f=>{ f.step(t); f.draw(); });
         state.particles.forEach(p=>{ p.step(); p.draw(); });
       } else {
@@ -618,18 +501,15 @@
     }
     requestAnimationFrame(tick);
 
-    /* Subtle parallax on grid canvas */
-    window.addEventListener('pointermove', (e)=>{
-      if (innerWidth < 720) return;
-      const dx = (e.clientX/innerWidth - .5) * 8;
-      const dy = (e.clientY/innerHeight - .5) * 8;
-      grid.style.transform = `translate(${dx}px, ${dy}px)`;
+    // Subtle parallax
+    window.addEventListener('pointermove', e=>{
+      if(innerWidth<720) return;
+      const dx=(e.clientX/innerWidth-.5)*8, dy=(e.clientY/innerHeight-.5)*8;
+      grid.style.transform=`translate(${dx}px, ${dy}px)`;
     }, {passive:true});
 
-    /* Accessibility: pause animations when tab hidden */
-    document.addEventListener('visibilitychange', () => { calm = document.hidden || calm; });
-
+    // Pause animations when hidden
+    document.addEventListener('visibilitychange', ()=>{ calm = document.hidden || calm; });
   </script>
-
 </body>
 </html>
